@@ -11,8 +11,8 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\Auth\User
-                property: uuid
+                class: App\Entity\User
+                property: username
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
@@ -20,11 +20,13 @@ security:
             security: false
         main:
             anonymous: true
-            guard:
-                authenticators:
-                    - App\Security\AppAuthenticator
+
+
             logout:
                 path: app_logout
+            guard:
+                authenticators:
+                    - App\Security\Authenticator
                 # where to redirect after logout
                 # target: app_any_route
 
