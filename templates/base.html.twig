@@ -1,12 +1,64 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+<header class="sticky-top bg-success">
+    <div class="row toast-header">
+        <div class="col-sm-4">
+            {% block header %}{% endblock %}
+        </div>
+        <div class="col-sm-4">
+
+        </div>
+        <div class="col-sm-4">
+            <nav class="navbar">
+                <a href="/login">login</a> | <a href="/logout">logout</a> | <a href="/site">site</a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div class="row toast-body">
+    <div class="col-sm-2">
+        <aside class="sidebar">
+            <nav class="side-nav">
+                <ul>
+                    <li><a href="/login">login</a></li>
+                    <li><a href="/logout">logout</a></li>
+                    <li><a href="/site">site</a></li>
+                </ul>
+            </nav>
+            {% block sidebar %}{% endblock %}
+        </aside>
+    </div>
+    <div class="col-sm-8">
+        <div class="shadow">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<footer class="fixed-bottom">
+    <div class="row">
+        <div class="col-sm-3">
+            <nav class="navbar">
+                <a href="/login">login</a> | <a href="/logout">logout</a> | <a href="/site">site</a>
+            </nav>
+        </div>
+        <div class="col-sm-9">
+            {% block footer %}{% endblock %}
+            {% block javascripts %}{% endblock %}
+        </div>
+    </div>
+</footer>
+
+</body>
 </html>

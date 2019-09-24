@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello guest!{% endblock %}
+{% block header %}<h3>Hello {{ controller_name }}! ✅</h3>{% endblock %}
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+        Here the list of our users:
+        <ul>
+            <li>{{ 'user_list' }}</li>
+        </ul>
+    </div>
+{% endblock %}
