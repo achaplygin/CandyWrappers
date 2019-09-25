@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -33,6 +35,16 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Stuff", mappedBy="user_id", orphanRemoval=true)
+     */
+    private $stuffs;
+
+    public function __construct()
+    {
+        $this->stuffs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,5 +117,36 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Stuff[]
+     */
+    public function getStuffs(): Collection
+    {
+        return $this->stuffs;
+    }
+
+    public function addStuff(Stuff $stuff): self
+    {
+        if (!$this->stuffs->contains($stuff)) {
+            $this->stuffs[] = $stuff;
+            $stuff->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStuff(Stuff $stuff): self
+    {
+        if ($this->stuffs->contains($stuff)) {
+            $this->stuffs->removeElement($stuff);
+            // set the owning side to null (unless already changed)
+            if ($stuff->getUserId() === $this) {
+                $stuff->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }
