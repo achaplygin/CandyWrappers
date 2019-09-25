@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class SiteController extends AbstractController
 {
@@ -21,7 +20,6 @@ class SiteController extends AbstractController
 
     /**
      * @Route("/users", name="users")
-     * @IsGranted("ROLE_USER")
      */
     public function users()
     {

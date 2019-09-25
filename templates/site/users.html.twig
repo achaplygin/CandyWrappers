@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ app.user.username ?? 'WTF?!' }}!{% endblock %}
-{% block header %}<h3>Hello {{ app.user.username ?? 'WTF?!' }} ✅</h3>{% endblock %}
+{% block title %}Hello {{ app.user.username ?? 'Guest' }}!{% endblock %}
+{% block header %}<h3>Hello {{ app.user.username ?? 'Guest' }} ✅</h3>{% endblock %}
 {% block body %}
     <style>
         .example-wrapper {
