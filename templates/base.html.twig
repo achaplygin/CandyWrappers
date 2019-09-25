@@ -2,25 +2,41 @@
 <html>
 <head>
     <meta charset="UTF-8">
-
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
-
     <title>{% block title %}Welcome!{% endblock %}</title>
+    <style>
+        li {
+            list-style-type: none;
+        }
+
+        .navbar {
+            display: inline-flex;
+            padding: 0px;
+        }
+
+        .btn {
+            width: -webkit-fill-available;
+            margin: 0 2px;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+        }
+    </style>
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
 
-<header class="sticky-top bg-success">
-    <div class="row toast-header">
+<header class="sticky-top">
+    <div class="row bg-success align-items-center">
         <div class="col-sm-4">
             {% block header %}{% endblock %}
         </div>
         <div class="col-sm-4">
-
+            <i>You are logged as "{{ app.user.username ?? 'Guest' }}"</i>
         </div>
         <div class="col-sm-4">
-            <nav class="navbar">
-                <a href="/login">login</a> | <a href="/logout">logout</a> | <a href="/site">site</a>
+            <nav class="navbar float-right">
+                {% include('menu.html.twig') %}
             </nav>
         </div>
     </div>
@@ -28,29 +44,31 @@
 
 <div class="row toast-body">
     <div class="col-sm-2">
-        <aside class="sidebar">
+        <aside class="shadow">
             <nav class="side-nav">
-                <ul>
-                    <li><a href="/login">login</a></li>
-                    <li><a href="/logout">logout</a></li>
-                    <li><a href="/site">site</a></li>
-                </ul>
+                {% include('menu.html.twig') %}
             </nav>
             {% block sidebar %}{% endblock %}
         </aside>
     </div>
-    <div class="col-sm-8">
-        <div class="shadow">
-            {% block body %}{% endblock %}
-        </div>
+    <div class="col-sm-8 shadow">
+        {% block body %}{% endblock %}
+    </div>
+    <div class="col-sm-2">
+        {% for flash in app.flashes('notice') %}
+            <div class="btn btn-info">
+                {{ flash }}
+            </div>
+            <hr>
+        {% endfor %}
     </div>
 </div>
 
-<footer class="fixed-bottom">
+<footer class="fixed-bottom bg-success">
     <div class="row">
         <div class="col-sm-3">
             <nav class="navbar">
-                <a href="/login">login</a> | <a href="/logout">logout</a> | <a href="/site">site</a>
+                {% include('menu.html.twig') %}
             </nav>
         </div>
         <div class="col-sm-9">

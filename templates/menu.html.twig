@@ -1,0 +1,6 @@
+<li><a class="btn btn-success" href="/">main</a></li>
+{% if is_granted('ROLE_USER') %}
+    <li><a class="btn btn-success" href="/users">users</a></li>
+{% endif %}
+<li><a class="btn btn-success" href="/login">login</a></li>
+<li><a class="btn btn-success" href="/logout">logout</a></li>

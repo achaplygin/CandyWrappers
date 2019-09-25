@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello guest!{% endblock %}
-{% block header %}<h3>Hello {{ controller_name }}! ✅</h3>{% endblock %}
+{% block title %}Hello {{ app.user.username ?? 'WTF?!' }}!{% endblock %}
+{% block header %}<h3>Hello {{ app.user.username ?? 'WTF?!' }} ✅</h3>{% endblock %}
 {% block body %}
     <style>
         .example-wrapper {
@@ -20,7 +20,15 @@
     <div class="example-wrapper">
         Here the list of our users:
         <ul>
-            <li>{{ 'user_list' }}</li>
+            {% for user in user_list %}
+                <li>
+                    <b>{{ user.username }}</b> [
+                    {% for role in user.roles %}
+                        &nbsp;{{ role }}&nbsp;
+                    {% endfor %}
+                    ]
+                </li>
+            {% endfor %}
         </ul>
     </div>
 {% endblock %}

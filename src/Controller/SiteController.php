@@ -3,15 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class SiteController extends AbstractController
 {
     /**
-     * @Route("/site", name="site")
+     * @Route("/", name="site")
      */
     public function index()
     {
@@ -22,15 +21,16 @@ class SiteController extends AbstractController
 
     /**
      * @Route("/users", name="users")
+     * @IsGranted("ROLE_USER")
      */
     public function users()
     {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-        $userList = implode('</li><li>', array_column($users, 'username'));
 
+        $this->addFlash('notice', 'app.flashes');
 
         return $this->render('site/users.html.twig', [
-            'user_list' => $userList,
+            'user_list' => $users,
         ]);
     }
 }
