@@ -5,14 +5,19 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="`user`")
+ * @UniqueEntity(fields="username", message="Username already taken")
  */
 class User implements UserInterface
 {
+    public const ROLE_USER = 'ROLE_USER';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -21,6 +26,8 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3)
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
@@ -31,6 +38,23 @@ class User implements UserInterface
     private $roles = [];
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(min=5)
+     * @Assert\Email(message = "The email '{{ value }}' is not a valid.")
+     * @ORM\Column(type="string", length=180, unique=true, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(min=5)
+     * @var string
+     */
+    private $plainPassword;
+
+    /**
+     * //@Assert\NotBlank()
+     * //@Assert\Length(min=3)
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
@@ -68,6 +92,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getEmail(): string
+    {
+        return (string)$this->username;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -75,7 +111,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = self::ROLE_USER;
 
         return array_unique($roles);
     }
@@ -102,6 +138,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getPlainPassword(): string
+    {
+        return (string)$this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -115,8 +163,7 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     /**
