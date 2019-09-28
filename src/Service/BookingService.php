@@ -5,6 +5,7 @@ namespace App\Service;
 
 
 use App\Entity\Booking;
+use App\Entity\Place;
 use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,12 +29,7 @@ class BookingService
      */
     public function book(Booking $booking): bool
     {
-        $bookings = $booking->getPlace()->getBookings();
-        $isFree = true;
-        foreach ($bookings as $item) {
-            $isFree = $isFree && ($booking->getStart() >= $item->getFinish() || $booking->getFinish() <= $item->getStart());
-        }
-        if ($isFree) {
+        if ($this->isFree($booking, $booking->getPlace())) {
             $this->em->persist($booking);
             $this->em->flush();
 
@@ -41,5 +37,21 @@ class BookingService
         }
 
         return false;
+    }
+
+    /**
+     * @param Booking $booking
+     * @param Place $place
+     * @return bool
+     */
+    private function isFree(Booking $booking, Place $place): bool
+    {
+        return array_reduce(
+            $place->getBookings(),
+            static function (bool $isFree, Booking $item) use ($booking) {
+                return $isFree && ($booking->getStart() >= $item->getFinish() || $booking->getFinish() <= $item->getStart());
+            },
+            true
+        );
     }
 }
