@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Stuff;
+use App\Entity\User;
 use App\Form\StuffType;
 use App\Repository\StuffRepository;
+use App\Service\StuffService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,13 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/stuff")
  * @IsGranted("ROLE_USER")
+ * @method User getUser()
  */
 class StuffController extends AbstractController
 {
     /**
      * @Route("/", name="stuff_index", methods={"GET"})
+     * @param StuffRepository $stuffRepository
+     * @return Response
      */
-    public function index(StuffRepository $stuffRepository): Response
+    public function index(StuffRepository $stuffRepository, StuffService $stuffService): Response
     {
         return $this->render('stuff/index.html.twig', [
             'stuffs' => $stuffRepository->findAll(),

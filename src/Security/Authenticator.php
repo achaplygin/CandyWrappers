@@ -3,11 +3,14 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\NativePasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -23,15 +26,23 @@ class Authenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    private $entityManager;
     private $urlGenerator;
     private $csrfTokenManager;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    /**
+     * @var PasswordEncoderInterface
+     */
+    private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager)
+    public function __construct(UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserRepository $userRepository, PasswordEncoderInterface $passwordEncoder)
     {
-        $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->userRepository = $userRepository;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function supports(Request $request)
@@ -62,7 +73,7 @@ class Authenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);
+        $user = $this->userRepository->findOneBy(['username' => $credentials['username']]);
 
         if (!$user) {
             // fail authentication with a custom error
@@ -74,13 +85,7 @@ class Authenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if ($user) {
-            $encoder = new BCryptPasswordEncoder(strlen($credentials['password']));
-            return $encoder->isPasswordValid($user->getPassword(), $credentials['password'], $user->getSalt());
-        }
-        // Check the user's password or other credentials and return true or false
-        // If there are no credentials to check, you can just return true
-        throw new \Exception('TODO: check the credentials inside ' . __FILE__);
+        return $this->passwordEncoder->isPasswordValid($user->getPassword(), $credentials['password'], $user->getSalt());
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

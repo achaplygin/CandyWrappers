@@ -53,8 +53,8 @@ class User implements UserInterface
     private $plainPassword;
 
     /**
-     * //@Assert\NotBlank()
-     * //@Assert\Length(min=3)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3)
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
@@ -64,6 +64,9 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Stuff", mappedBy="user_id", orphanRemoval=true)
      */
     private $stuffs;
+
+    /** @ORM\Column(type="string", nullable=true) */
+    private $emailConfirm;
 
     public function __construct()
     {
@@ -195,5 +198,21 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmailConfirm(): ?string
+    {
+        return $this->emailConfirm;
+    }
+
+    /**
+     * @param mixed $emailConfirm
+     */
+    public function setEmailConfirm($emailConfirm): void
+    {
+        $this->emailConfirm = $emailConfirm;
     }
 }

@@ -3,11 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SiteController extends AbstractController
 {
+
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     /**
      * @Route("/", name="site")
      */
@@ -23,7 +34,7 @@ class SiteController extends AbstractController
      */
     public function users()
     {
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $users = $this->userRepository->findAll();
 
         $this->addFlash('notice', 'app.flashes');
 
