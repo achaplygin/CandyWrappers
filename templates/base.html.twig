@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>{% block title %}Welcome!{% endblock %}</title>
     <style>
         li {
@@ -15,7 +16,7 @@
         }
 
         .btn-fill {
-            width:100%;
+            width: 100%;
             margin: 0 2px;
             -webkit-border-radius: 0;
             -moz-border-radius: 0;
@@ -56,9 +57,11 @@
         {% block body %}{% endblock %}
     </div>
     <div class="col-sm-2">
-        {% for flash in app.flashes('notice') %}
-            <div class="btn btn-info">
-                {{ flash }}
+        {% for flash in app.flashes('Error') %}
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    {{ flash }}
+                </div>
             </div>
             <hr>
         {% endfor %}

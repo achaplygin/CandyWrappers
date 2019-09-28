@@ -68,9 +68,15 @@ class User implements UserInterface
     /** @ORM\Column(type="string", nullable=true) */
     private $emailConfirm;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="renter", orphanRemoval=true)
+     */
+    private $bookings;
+
     public function __construct()
     {
         $this->stuffs = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -214,5 +220,36 @@ class User implements UserInterface
     public function setEmailConfirm($emailConfirm): void
     {
         $this->emailConfirm = $emailConfirm;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setRenter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getRenter() === $this) {
+                $booking->setRenter(null);
+            }
+        }
+
+        return $this;
     }
 }
