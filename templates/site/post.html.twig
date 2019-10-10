@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Some post{% endblock %}
+{% block header %}<h3>Some random post ✅</h3>{% endblock %}
+{% block body %}
+
+    <div class="row  m-5">
+        <hr>
+        <div class="col-sm-12">
+            <h1><b>Post[{{ post.id }}]: "{{ post.title|raw }}"</b></h1>
+        </div>
+        <div class="col-sm-12">
+            {{ post.introtext|raw }}
+        </div>
+        <hr>
+        <div class="col-sm-12">
+            {{ post.fulltext|raw }}
+        </div>
+    </div>
+{% endblock %}
