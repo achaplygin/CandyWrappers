@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Form\PostType;
 use App\Repository\ContentRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SiteController extends AbstractController
@@ -30,6 +31,7 @@ class SiteController extends AbstractController
         $this->userRepository = $userRepository;
         $this->contentRepository = $contentRepository;
     }
+
     /**
      * @Route("/", name="site")
      */
@@ -64,6 +66,28 @@ class SiteController extends AbstractController
 
         return $this->render('site/post.html.twig', [
             'post' => $post,
+        ]);
+    }
+
+    /**
+     * @Route("/post-edit/{id}", name="post-edit")
+     * @throws \Exception
+     */
+    public function postEdit(Request $request, $id)
+    {
+        $post = $this->contentRepository->findOneBy(['id' => $id]);
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('post');
+        }
+
+        return $this->render('site/post-edit.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
         ]);
     }
 

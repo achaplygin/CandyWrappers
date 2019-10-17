@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Some post{% endblock %}
+{% block header %}<h3>Some random post ✅</h3>{% endblock %}
+{% block body %}
+
+    <div class="row  m-5">
+        <hr>
+        <div class="col-sm-12">
+            <h4><b>Title:</b></h4>
+            {{ form_widget(form.title) }}
+        </div>
+        <hr>
+        <div class="col-sm-12">
+            <h4><b>Text preview:</b></h4>
+        </div>
+        <hr>
+        <div class="col-sm-12">
+            {{ form_widget(form.introtext) }}
+        </div>
+        <hr>
+        <div class="col-sm-12">
+            <h4><b>Full Text:</b></h4>
+        </div>
+        <hr>
+        <div class="col-sm-12">
+            {{ form_widget(form.fulltext) }}
+        </div>
+    </div>
+{% endblock %}
