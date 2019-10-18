@@ -6,10 +6,10 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ContentRepository")
- * @ORM\Table(name="content")
+ * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
+ * @ORM\Table(name="post")
  */
-class Content
+class Post
 {
     /**
      * @ORM\Id()
@@ -51,7 +51,7 @@ class Content
     /**
      * @ORM\Column(type="integer")
      */
-    private $catid;
+    private $category_id;
 
     /**
      * @ORM\Column(type="datetime")
@@ -144,6 +144,12 @@ class Content
     private $metadata;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -161,7 +167,7 @@ class Content
 
     /**
      * @param int|null $asset_id
-     * @return Content
+     * @return Post
      */
     public function setAssetId(?int $asset_id): self
     {
@@ -180,7 +186,7 @@ class Content
 
     /**
      * @param string $title
-     * @return Content
+     * @return Post
      */
     public function setTitle(string $title): self
     {
@@ -199,7 +205,7 @@ class Content
 
     /**
      * @param string $slug
-     * @return Content
+     * @return Post
      */
     public function setSlug(string $slug): self
     {
@@ -218,7 +224,7 @@ class Content
 
     /**
      * @param string|null $introtext
-     * @return Content
+     * @return Post
      */
     public function setIntrotext(?string $introtext): self
     {
@@ -237,7 +243,7 @@ class Content
 
     /**
      * @param string|null $fulltext
-     * @return Content
+     * @return Post
      */
     public function setFulltext(?string $fulltext): self
     {
@@ -256,7 +262,7 @@ class Content
 
     /**
      * @param int $state
-     * @return Content
+     * @return Post
      */
     public function setState(int $state): self
     {
@@ -268,18 +274,18 @@ class Content
     /**
      * @return int|null
      */
-    public function getCatid(): ?int
+    public function getCategoryId(): ?int
     {
-        return $this->catid;
+        return $this->category_id;
     }
 
     /**
-     * @param int $catid
-     * @return Content
+     * @param int $category_id
+     * @return Post
      */
-    public function setCatid(int $catid): self
+    public function setCategoryId(int $category_id): self
     {
-        $this->catid = $catid;
+        $this->category_id = $category_id;
 
         return $this;
     }
@@ -294,7 +300,7 @@ class Content
 
     /**
      * @param DateTimeInterface $created
-     * @return Content
+     * @return Post
      */
     public function setCreated(DateTimeInterface $created): self
     {
@@ -313,7 +319,7 @@ class Content
 
     /**
      * @param int $created_by
-     * @return Content
+     * @return Post
      */
     public function setCreatedBy(int $created_by): self
     {
@@ -332,7 +338,7 @@ class Content
 
     /**
      * @param DateTimeInterface $modified
-     * @return Content
+     * @return Post
      */
     public function setModified(DateTimeInterface $modified): self
     {
@@ -351,7 +357,7 @@ class Content
 
     /**
      * @param int $modified_by
-     * @return Content
+     * @return Post
      */
     public function setModifiedBy(int $modified_by): self
     {
@@ -370,7 +376,7 @@ class Content
 
     /**
      * @param int|null $checked_out
-     * @return Content
+     * @return Post
      */
     public function setCheckedOut(?int $checked_out): self
     {
@@ -389,7 +395,7 @@ class Content
 
     /**
      * @param DateTimeInterface|null $checked_out_time
-     * @return Content
+     * @return Post
      */
     public function setCheckedOutTime(?DateTimeInterface $checked_out_time): self
     {
@@ -408,7 +414,7 @@ class Content
 
     /**
      * @param DateTimeInterface $publish_up
-     * @return Content
+     * @return Post
      */
     public function setPublishUp(DateTimeInterface $publish_up): self
     {
@@ -427,7 +433,7 @@ class Content
 
     /**
      * @param DateTimeInterface $publish_down
-     * @return Content
+     * @return Post
      */
     public function setPublishDown(DateTimeInterface $publish_down): self
     {
@@ -446,7 +452,7 @@ class Content
 
     /**
      * @param string|null $images
-     * @return Content
+     * @return Post
      */
     public function setImages(?string $images): self
     {
@@ -465,7 +471,7 @@ class Content
 
     /**
      * @param string|null $urls
-     * @return Content
+     * @return Post
      */
     public function setUrls(?string $urls): self
     {
@@ -484,7 +490,7 @@ class Content
 
     /**
      * @param string|null $attribs
-     * @return Content
+     * @return Post
      */
     public function setAttribs(?string $attribs): self
     {
@@ -503,7 +509,7 @@ class Content
 
     /**
      * @param int|null $version
-     * @return Content
+     * @return Post
      */
     public function setVersion(?int $version): self
     {
@@ -522,7 +528,7 @@ class Content
 
     /**
      * @param int|null $parentid
-     * @return Content
+     * @return Post
      */
     public function setParentid(?int $parentid): self
     {
@@ -541,7 +547,7 @@ class Content
 
     /**
      * @param int|null $ordering
-     * @return Content
+     * @return Post
      */
     public function setOrdering(?int $ordering): self
     {
@@ -560,7 +566,7 @@ class Content
 
     /**
      * @param string|null $metakey
-     * @return Content
+     * @return Post
      */
     public function setMetakey(?string $metakey): self
     {
@@ -579,7 +585,7 @@ class Content
 
     /**
      * @param string|null $metadesc
-     * @return Content
+     * @return Post
      */
     public function setMetadesc(?string $metadesc): self
     {
@@ -598,7 +604,7 @@ class Content
 
     /**
      * @param int|null $hits
-     * @return Content
+     * @return Post
      */
     public function setHits(?int $hits): self
     {
@@ -617,11 +623,23 @@ class Content
 
     /**
      * @param string|null $metadata
-     * @return Content
+     * @return Post
      */
     public function setMetadata(?string $metadata): self
     {
         $this->metadata = $metadata;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

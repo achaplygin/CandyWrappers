@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Form\PostType;
-use App\Repository\ContentRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,19 +18,24 @@ class SiteController extends AbstractController
      */
     private $userRepository;
     /**
-     * @var ContentRepository
+     * @var PostRepository
      */
-    private $contentRepository;
+    private $postRepository;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
     /**
      * SiteController constructor.
      * @param UserRepository $userRepository
-     * @param ContentRepository $contentRepository
+     * @param PostRepository $postRepository
      */
-    public function __construct(UserRepository $userRepository, ContentRepository $contentRepository)
+    public function __construct(UserRepository $userRepository, PostRepository $postRepository, CategoryRepository $categoryRepository)
     {
         $this->userRepository = $userRepository;
-        $this->contentRepository = $contentRepository;
+        $this->postRepository = $postRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -62,7 +68,7 @@ class SiteController extends AbstractController
      */
     public function post($id)
     {
-        $post = $this->contentRepository->findOneBy(['id' => $id]);
+        $post = $this->postRepository->findOneBy(['id' => $id]);
 
         return $this->render('site/post.html.twig', [
             'post' => $post,
@@ -75,7 +81,7 @@ class SiteController extends AbstractController
      */
     public function postEdit(Request $request, $id)
     {
-        $post = $this->contentRepository->findOneBy(['id' => $id]);
+        $post = $this->postRepository->findOneBy(['id' => $id]);
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -97,10 +103,10 @@ class SiteController extends AbstractController
      */
     public function list()
     {
-        $posts = $this->contentRepository->findAll();
+        $categories = $this->categoryRepository->findAll();
 
         return $this->render('site/list.html.twig', [
-            'posts' => $posts,
+            'categories' => $categories,
         ]);
     }
 }

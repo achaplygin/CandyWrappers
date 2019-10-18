@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Content;
+use App\Entity\Post;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -23,7 +23,7 @@ class PostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Content::class,
+            'data_class' => Post::class,
         ]);
     }
 }
